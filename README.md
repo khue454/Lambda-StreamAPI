@@ -3,6 +3,7 @@
 # Content
 ## Lambda Expression
 * What is Lambda Expression?
+* Functional interfaces?
 * Why do we need lambda expressions?
 
 ## Stream API
@@ -67,4 +68,7 @@
   }
 }
  ``` 
+## Note
+Please create a github account and fork this repository and start the study and do the exercises. When you're done just send a [pull/merge request](https://help.github.com/articles/about-pull-requests/) to this repo.
+
     
