@@ -26,42 +26,39 @@ public class InterestedTopicOperations {
 
 		// find out list newly added topics
 		List<Topic> addedTopics;
-		addedTopics = updatingTopics.stream()
-				.filter(topic -> currentTopics.stream()
-						.filter(currentTopic -> currentTopic.getId().equals(topic.getId())).count() == 0)
+		addedTopics = updatingTopics.stream().filter(
+				topic -> currentTopics.stream().noneMatch(currentTopic -> currentTopic.getId().equals(topic.getId())))
 				.collect(Collectors.toList());
-		System.out.println("Newly added Topics:");
 		if (!addedTopics.isEmpty()) {
+			System.out.println("Newly added Topics:");
 			addedTopics.forEach(System.out::println);
-		}else {
+		} else {
 			System.out.println("There is no newly added topic");
 		}
 		System.out.println("=========================================================");
-		
+
 		// find out list updated topics
 		List<Topic> updatedTopics;
-		updatedTopics = updatingTopics.stream()
-				.filter(topic -> currentTopics.stream()
-						.filter(currentTopic -> currentTopic.getId().equals(topic.getId())).count() != 0)
+		updatedTopics = updatingTopics.stream().filter(
+				topic -> currentTopics.stream().anyMatch(currentTopic -> currentTopic.getId().equals(topic.getId())))
 				.collect(Collectors.toList());
-		System.out.println("Updated Topics:");
 		if (!updatedTopics.isEmpty()) {
+			System.out.println("Updated Topics:");
 			updatedTopics.forEach(System.out::println);
-		}else {
+		} else {
 			System.out.println("There is no updated topic");
 		}
 		System.out.println("=========================================================");
-		
+
 		// find out list deleted topics
 		List<Topic> deletedTopics;
-		deletedTopics = currentTopics.stream()
-				.filter(topic -> updatingTopics.stream()
-						.filter(updatingTopic -> updatingTopic.getId().equals(topic.getId())).count() == 0)
+		deletedTopics = currentTopics.stream().filter(
+				topic -> updatingTopics.stream().noneMatch(updatedTopic -> updatedTopic.getId().equals(topic.getId())))
 				.collect(Collectors.toList());
-		System.out.println("Deleted Topics:");
 		if (!deletedTopics.isEmpty()) {
+			System.out.println("Deleted Topics:");
 			deletedTopics.forEach(System.out::println);
-		}else {
+		} else {
 			System.out.println("There is no deleted topic");
 		}
 	}
