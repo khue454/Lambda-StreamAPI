@@ -1,7 +1,9 @@
 package lambdastreamapi.exercise2;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+
+import static java.util.stream.Collectors.*;
 import java.util.stream.Stream;
 
 import org.json.simple.JSONObject;
@@ -26,44 +28,31 @@ public class ProgrammerCategorizing {
 			String name = "Programmer_" + id;
 			Gender gender = (id + division + team) % 2 == 0 ? Gender.MALE : Gender.FEMALE;
 			return new Programmer(id + "", name, DIVISIONS[division], TEAMS[team], gender);
-		}).limit(LIMITED_PROGRAMMER).collect(Collectors.toList());
+		}).limit(LIMITED_PROGRAMMER).collect(toList());
 		return programmers;
 	}
 
 	// Categorize programmers into divisions
-	@SuppressWarnings("unchecked")
 	static void doTask1(List<Programmer> programmers) {
-		JSONObject jsonProgrammers = new JSONObject();
 		System.out.println("Categorize programmers into divisions:");
 
-		programmers.stream().collect(Collectors.groupingBy(Programmer::getDivision)).forEach((k, v) -> {
-			jsonProgrammers.put(k, v.stream().map(Programmer::getName).collect(Collectors.toList()));
-		});
+		Map<String, List<String>> mapProgrammers = programmers.parallelStream()
+				.collect(groupingBy(Programmer::getDivision, mapping(Programmer::getName, toList())));
 
 		System.out.println(new GsonBuilder().setPrettyPrinting().create()
-				.toJson(new JsonParser().parse(jsonProgrammers.toJSONString())));
+				.toJson(new JsonParser().parse(new JSONObject(mapProgrammers).toJSONString())));
 	}
 
 	// Categorize programmers into divisions, then teams, then genders
-	@SuppressWarnings("unchecked")
 	static void doTask2(List<Programmer> programmers) {
-		JSONObject jsonProgrammers = new JSONObject();
 		System.out.println("Categorize programmers into divisions, then teams, then genders");
 
-		programmers.stream().collect(Collectors.groupingBy(Programmer::getDivision)).forEach((kDiv, vDiv) -> {
-			JSONObject jsonTeam = new JSONObject();
-			vDiv.stream().collect(Collectors.groupingBy(Programmer::getTeam)).forEach((kTeam, vTeam) -> {
-				JSONObject jsonGender = new JSONObject();
-				vTeam.stream().collect(Collectors.groupingBy(Programmer::getGender)).forEach((kGender, vGender) -> {
-					jsonGender.put(kGender, vGender.stream().map(Programmer::getName).collect(Collectors.toList()));
-				});
-				jsonTeam.put(kTeam, jsonGender);
-			});
-			jsonProgrammers.put(kDiv, jsonTeam);
-		});
+		Map<String, Map<String, Map<Programmer.Gender, List<String>>>> mapProgrammers = programmers.parallelStream()
+				.collect(groupingBy(Programmer::getDivision, groupingBy(Programmer::getTeam,
+						groupingBy(Programmer::getGender, mapping(Programmer::getName, toList())))));
 
 		System.out.println(new GsonBuilder().setPrettyPrinting().create()
-				.toJson(new JsonParser().parse(jsonProgrammers.toJSONString())));
+				.toJson(new JsonParser().parse(new JSONObject(mapProgrammers).toJSONString())));
 	}
 
 	public static void main(String[] args) {
