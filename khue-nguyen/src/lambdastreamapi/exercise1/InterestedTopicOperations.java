@@ -12,7 +12,7 @@ public class InterestedTopicOperations {
 
 		currentTopics = new ArrayList<>();
 		updatingTopics = new ArrayList<>();
-		System.out.println("++++++++++++++++++++++++++");
+		
 		currentTopics.add(new Topic("topic 1", "Grails", "new"));
 		currentTopics.add(new Topic("topic 2", "OOPs", "new"));
 		currentTopics.add(new Topic("topic 3", "IO", "new"));
