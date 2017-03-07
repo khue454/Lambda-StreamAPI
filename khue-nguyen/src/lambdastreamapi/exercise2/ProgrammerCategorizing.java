@@ -57,7 +57,7 @@ public class ProgrammerCategorizing {
 
 	public static void main(String[] args) {
 		List<Programmer> programmers = loadData();
-		
+
 		// List all programmers
 		System.out.println("List all:");
 		programmers.forEach(System.out::println);
